@@ -1,0 +1,84 @@
+### UMKM Tracker API - Authentication Testing
+### Use this file with REST Client extension in VS Code or any HTTP client
+
+@baseUrl = http://localhost:3000
+@token = your-token-here
+
+### 1. Health Check
+GET {{baseUrl}}
+
+### 2. Register New User
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+### 3. Register Another User
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Jane Smith",
+  "email": "jane@example.com",
+  "password": "password456"
+}
+
+### 4. Login User
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+### 5. Login with Wrong Password (Should fail with 401)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "wrongpassword"
+}
+
+### 6. Get User Profile (Protected - Requires Token)
+# First, copy the accessToken from login response and replace {{token}} above
+GET {{baseUrl}}/users/profile
+Authorization: Bearer {{token}}
+
+### 7. Try to Access Profile Without Token (Should fail with 401)
+GET {{baseUrl}}/users/profile
+
+### 8. Register with Invalid Email (Should fail with 400)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Invalid User",
+  "email": "invalid-email",
+  "password": "password123"
+}
+
+### 9. Register with Short Password (Should fail with 400)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Short Pass User",
+  "email": "short@example.com",
+  "password": "12345"
+}
+
+### 10. Register with Existing Email (Should fail with 409)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Duplicate User",
+  "email": "john@example.com",
+  "password": "password123"
+}
