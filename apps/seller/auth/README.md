@@ -107,15 +107,15 @@ Authorization: Bearer <your-jwt-token>
 
 ## Using Authentication in Your Routes
 
-To protect a route with JWT authentication, use the `JwtAuthGuard`:
+To protect a route with JWT authentication, use the `AuthGuard`:
 
 ```typescript
 import { Controller, Get, UseGuards, Request } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('protected')
 export class ProtectedController {
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   getProtectedData(@Request() req) {
     // Access user info from req.user

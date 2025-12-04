@@ -10,11 +10,20 @@
     "deleteOutDir": true
   },
   "projects": {
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
+      }
+    },
     "seller": {
       "type": "application",
       "root": "apps/seller",
       "entryFile": "main",
-      "sourceRoot": "apps/seller/src",
+      "sourceRoot": "apps/seller",
       "compilerOptions": {
         "tsConfigPath": "apps/seller/tsconfig.app.json"
       }

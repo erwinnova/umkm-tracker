@@ -1,0 +1,43 @@
+"### UMKM Tracker API - Migration Testing
+### Base URL: http://localhost:3000
+
+### 1. Check Migration Status
+GET http://localhost:3000/migrations/status
+Content-Type: application/json
+
+### 2. Run All Migrations
+POST http://localhost:3000/migrations/run
+Content-Type: application/json
+
+### 3. Verify Tables Created - Test User Registration
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  \"name\": \"John Doe\",
+  \"email\": \"john@example.com\", 
+  \"password\": \"password123\"
+}
+
+### 4. Test Login with Test User
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  \"email\": \"seller@umkm.com\", 
+  \"password\": \"password123\"
+}
+
+### 5. Get User Profile (Protected Route)
+GET http://localhost:3000/users/profile
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+### 6. Revert Last Migration (Testing)
+POST http://localhost:3000/migrations/revert
+Content-Type: application/json
+
+### 7. Check Migration Status after Revert
+GET http://localhost:3000/migrations/status
+Content-Type: application/json
+"

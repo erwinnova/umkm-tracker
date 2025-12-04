@@ -1,0 +1,7 @@
+{
+  "name": "@app/shared",
+  "version": "1.0.0",
+  "description": "Shared library for UMKM Tracker API",
+  "main": "index.ts",
+  "private": true
+}
