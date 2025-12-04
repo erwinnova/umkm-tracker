@@ -16,11 +16,11 @@ import { HealthModule } from './health.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
+        type: 'mysql',
         host: configService.get('DB_HOST', 'localhost'),
-        port: configService.get('DB_PORT', 5432),
-        username: configService.get('DB_USERNAME', 'postgres'),
-        password: configService.get('DB_PASSWORD', 'postgres'),
+        port: configService.get('DB_PORT', 3306),
+        username: configService.get('DB_USERNAME', 'root'),
+        password: configService.get('DB_PASSWORD', ''),
         database: configService.get('DB_NAME', 'umkm_tracker_seller'),
         logging: configService.get('NODE_ENV') === 'development',
         autoLoadEntities: true,
@@ -28,10 +28,6 @@ import { HealthModule } from './health.module';
           min: 2,
           max: 10,
         },
-        poolErrorHandler: (err: Error) => {
-          console.error('Unexpected error on idle client', err);
-        },
-        connectTimeoutMS: 10000,
       }),
       inject: [ConfigService],
     }),
