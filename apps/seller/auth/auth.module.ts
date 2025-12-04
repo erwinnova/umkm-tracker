@@ -13,18 +13,27 @@ import { UsersModule } from '../users/users.module';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret:
-          configService.get<string>('JWT_SECRET') ||
-          'your-secret-key-change-in-production',
-        signOptions: {
-          expiresIn: (configService.get<string>('JWT_EXPIRES_IN') ||
-            '24h') as any,
-        },
-      }),
+      useFactory: (configService: ConfigService) => {
+        const jwtSecret = configService.get<string>('JWT_SECRET');
+        if (!jwtSecret && configService.get('NODE_ENV') === 'production') {
+          throw new Error(
+            'JWT_SECRET environment variable is required in production',
+          );
+        }
+
+        const expiresInEnv = configService.get<string>('JWT_EXPIRES_IN');
+        const expiresIn = expiresInEnv ? parseInt(expiresInEnv, 10) : 86400;
+
+        return {
+          secret:
+            jwtSecret || 'a-very-strong-and-secure-secret-for-development',
+          signOptions: {
+            expiresIn,
+          },
+        };
+      },
       inject: [ConfigService],
     }),
-    ConfigModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
