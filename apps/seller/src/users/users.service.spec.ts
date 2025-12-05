@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { User, UserRole } from '@app/shared';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -11,10 +11,13 @@ describe('UsersService', () => {
   const mockUser: User = {
     id: '1',
     email: 'test@example.com',
-    name: 'Test User',
+    fullName: 'Test User',
     password: 'hashedpassword',
     createdAt: new Date(),
     updatedAt: new Date(),
+    phoneNumber: null,
+    role: UserRole.BUYER,
+    seller: null,
   };
 
   beforeEach(async () => {

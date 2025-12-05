@@ -52,9 +52,9 @@
               "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/auth/register",
+              "raw": "{{baseUrl}}/seller/auth/register",
               "host": ["{{baseUrl}}"],
-              "path": ["auth", "register"]
+              "path": ["seller", "auth", "register"]
             }
           },
           "response": []
@@ -91,9 +91,9 @@
               "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/auth/login",
+              "raw": "{{baseUrl}}/seller/auth/login",
               "host": ["{{baseUrl}}"],
-              "path": ["auth", "login"]
+              "path": ["seller", "auth", "login"]
             }
           },
           "response": []
@@ -115,9 +115,240 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/users/profile",
+              "raw": "{{baseUrl}}/seller/users/profile",
               "host": ["{{baseUrl}}"],
-              "path": ["users", "profile"]
+              "path": ["seller", "users", "profile"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Store",
+      "item": [
+        {
+          "name": "Create Store Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.test(\"Store profile created successfully\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property('id');",
+                  "        pm.expect(jsonData).to.have.property('storeName');",
+                  "        pm.expect(jsonData.isOpen).to.eql(false);",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"storeName\": \"My Store\",\n  \"description\": \"A great store\",\n  \"category\": \"Electronics\",\n  \"bannerUrl\": \"https://example.com/banner.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/seller/store/onboarding",
+              "host": ["{{baseUrl}}"],
+              "path": ["seller", "store", "onboarding"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Store Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/seller/store/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["seller", "store", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Store Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isOpen\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/seller/store/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["seller", "store", "status"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.test(\"Product created successfully\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property('id');",
+                  "        pm.expect(jsonData).to.have.property('name');",
+                  "        pm.expect(jsonData).to.have.property('price');",
+                  "        pm.expect(jsonData.isAvailable).to.eql(true);",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Product Name\",\n  \"price\": 99.99,\n  \"description\": \"Product description\",\n  \"imageUrl\": \"https://example.com/product.jpg\",\n  \"isAvailable\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/seller/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["seller", "products"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/seller/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["seller", "products"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/seller/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["seller", "products", "{{productId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Product Name\",\n  \"price\": 149.99,\n  \"isAvailable\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/seller/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["seller", "products", "{{productId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/seller/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["seller", "products", "{{productId}}"]
             }
           },
           "response": []
