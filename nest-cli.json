@@ -23,7 +23,7 @@
       "type": "application",
       "root": "apps/seller",
       "entryFile": "main",
-      "sourceRoot": "apps/seller",
+      "sourceRoot": "apps/seller/src",
       "compilerOptions": {
         "tsConfigPath": "apps/seller/tsconfig.app.json"
       }

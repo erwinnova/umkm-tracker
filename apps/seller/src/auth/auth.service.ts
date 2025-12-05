@@ -1,9 +1,14 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { UserRole } from '@app/shared';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +18,7 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const { email, password, name } = registerDto;
+    const { email, password, fullname } = registerDto;
 
     // Check if user already exists
     const existingUser = await this.usersService.findByEmail(email);
@@ -29,7 +34,8 @@ export class AuthService {
     const user = await this.usersService.create({
       email,
       password: hashedPassword,
-      name,
+      fullName: fullname,
+      role: UserRole.SELLER,
     });
 
     // Generate JWT token
@@ -41,7 +47,7 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
+        fullname: user.fullName,
       },
       accessToken,
     };
@@ -50,8 +56,8 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
 
-    // Find user by email
-    const user = await this.usersService.findByEmail(email);
+    // Find user by email with password field selected
+    const user = await this.usersService.findByEmailWithPassword(email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -71,7 +77,7 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
+        name: user.fullName,
       },
       accessToken,
     };

@@ -11,6 +11,8 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { Product } from './product.entity';
+import { SellerSession } from './seller-session.entity';
+import { SellerLocationLog } from './seller-location-log.entity';
 import { SpatialPointTransformer, Point } from './spatial.transformer';
 
 @Entity('sellers')
@@ -45,6 +47,9 @@ export class Seller {
    * Spatial column for storing seller location (SRID 4326)
    * Stores latitude and longitude as a POINT geometry
    * MariaDB stores this as binary WKB format, transformer converts to/from Point object
+   *
+   * Note: Set select: false to prevent TypeORM from using spatial functions
+   * during standard queries. Explicitly select when needed.
    */
   @Column({
     type: 'point',
@@ -53,6 +58,7 @@ export class Seller {
     nullable: true,
     name: 'last_location',
     transformer: new SpatialPointTransformer(),
+    select: false, // Don't select by default to avoid AsText() errors
   })
   lastLocation: Point | null;
 
@@ -74,6 +80,16 @@ export class Seller {
     cascade: ['remove'],
   })
   products: Product[];
+
+  @OneToMany(() => SellerSession, (session) => session.seller, {
+    cascade: ['remove'],
+  })
+  sessions: SellerSession[];
+
+  @OneToMany(() => SellerLocationLog, (log) => log.seller, {
+    cascade: ['remove'],
+  })
+  locationLogs: SellerLocationLog[];
 }
 
 // Create spatial index on last_location for performance

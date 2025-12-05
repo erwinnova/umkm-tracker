@@ -7,6 +7,9 @@ import { ResponseInterceptor, HttpExceptionFilter } from '@app/shared';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Set global prefix for all routes
+  app.setGlobalPrefix('seller/v1');
+
   // Enable global validation
   app.useGlobalPipes(
     new ValidationPipe({
