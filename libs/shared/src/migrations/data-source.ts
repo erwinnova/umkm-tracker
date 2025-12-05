@@ -14,7 +14,9 @@ export const dataSourceOptions: DataSourceOptions & SeederOptions = {
   database: process.env.DB_NAME,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  entities: [__dirname + '/../entities/**/*{.ts,.js}'],
+  // Improved entity loading pattern to avoid barrel exports and index files
+  // Only load .entity.ts and .entity.js files, skip index.ts
+  entities: [__dirname + '/../entities/**/*.entity{.ts,.js}'],
   seeds: ['../seed/**/*{.ts,.js}'],
   factories: [__dirname + '../factories/**/*{.ts,.js}'],
   synchronize: false, // do not set it true in production application
